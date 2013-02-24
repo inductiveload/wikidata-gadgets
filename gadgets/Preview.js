@@ -130,6 +130,10 @@
 		} );
 	}
 
+	function getTranslateLink(src, dest, url) {
+		return '//translate.google.com/translate?sl='+src+'&tl='+dest+'&u='+url;
+	}
+
 	/**
 	 * Showing the preview got by an http request. Requests are cached.
 	 *
@@ -162,6 +166,9 @@
 			showPreview( cache[lang], previewRowClass );
 		}
 		else {
+
+			var articleLink = '//' + lang + '.wikipedia.org/wiki/' + mw.util.wikiUrlencode( title );
+
 			mw.loader.using( ['jquery.spinner'], function() {
 
 				$.createSpinner( {
@@ -205,9 +212,9 @@
 						.append(
 							$( '<a>' )
 							.attr( {
-								href: '#',
+								href: getTranslateLink(lang, mw.config.get( 'wgUserLanguage' ), articleLink),
 								'class': 'x-articlepreview-translate',
-							} )
+							})
 							.text( mw.msg( 'translate' ) ) // </a>
 						)
 						.append( ']' )
@@ -226,7 +233,7 @@
 								})
 								.append(
 									$( '<a>' )
-									.attr( 'href', '//' + lang + '.wikipedia.org/wiki/' + mw.util.wikiUrlencode( title ) )
+									.attr( 'href', articleLink )
 									.text( mw.msg( 'readmore' ) )
 								) // </a>
 							) // </p>
@@ -259,31 +266,6 @@
 			$( this ).parents('tr.' + rowClass).remove();
 			e.preventDefault();
 		});
-
-		$( '.x-articlepreview-translate' ).click( function(e) {
-			var dest = mw.config.get( 'wgUserLanguage' );
-			var src = $( this ).parents('tr.' + rowClass).attr('lang');
-			var articleParas = $( this ).parent().siblings('.x-articlepreview-article').children('p');
-			var text = '';
-
-			for (var i = 0; i < articleParas.length; i++) {
-				var para = $(articleParas[i]);
-
-				if (para.hasClass('x-articlepreview-readmore')) {
-					continue
-				}
-
-				text += para.text() + '\n\n';
-			}
-
-			text = encodeURIComponent(text);
-
-			var url = '//translate.google.com/?#' + src + '|' + dest + '|' + text;
-
-			window.open(url);
-			e.preventDefault();
-		});
-
 	}
 
 	$( document ).ready( init );
