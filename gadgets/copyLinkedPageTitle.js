@@ -7,11 +7,15 @@
 
 var CopyLinkedPageTitle = (function ($) {
 	var my = {};
+
+	var tagIcon = '//upload.wikimedia.org/wikipedia/commons/1/1d/Tag_blue.png';
 	
 	var insertLink = function (i, v) {
 		$(v).append( $('<span>')
+				.attr({'class':'x-sitelinktolabel'})
+				.css({'padding-left':'3px'})
 				.append( $('<img>', {
-					'src':'//upload.wikimedia.org/wikipedia/commons/1/1d/Tag_blue.png', 
+					'src':tagIcon, 
 					'title':'Use for the item label'})
 				.click(useLabel)
 				)
@@ -23,7 +27,7 @@ var CopyLinkedPageTitle = (function ($) {
 		
 		var labelBox = $('.wb-ui-labeledittool input');
 		
-		labelBox.val(label).trigger('keydown',  [45] );
+		labelBox.val(label).trigger('input');
 	}
 	
 	
