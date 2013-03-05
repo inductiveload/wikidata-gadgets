@@ -14,6 +14,10 @@ var ClassifyEntity = (function ($) {
 		'de':['Person', 'Name', 'Organisation', 'Veranstaltung', 'Werk', 'Sachbegriff', 'Geografikum'],
 	};
 	var typeIds = [215627, 4167410, 43229, 1656682, 386724, 1969448, 618123];
+	
+	var countries = [
+				['UK', 145], ['Germany', 183],	['France', 142],
+				['Hungary', 28], ['Russia', 159] ]
 
 	var properties = [];
 	var changed = false;
@@ -75,17 +79,24 @@ var ClassifyEntity = (function ($) {
 			text = 'Sex of person',
 			props = {'id': 21,
 				'options': [ ['male', 44148], ['female', 43445], ['intersex', 1097630] ],
-				'followup': function () { additionalQuery('country'); }
+				'followup': function () { additionalQuery('countryofcit'); }
 			};
 		}
 
-		if (type === 'country'){
+		if (type === 'countryofcit'){
 			var title = "Country",
-			text = 'Country of citizenship/location',
+			text = 'Country of citizenship',
 			props = {'id': 27,
-				'options': [
-				['UK', 145], ['Germany', 183],	['France', 142],
-				['Hungary', 28] ],
+				'options': countries,
+				'followup': function () { saveProperties(); }
+			};
+		}
+		
+		if (type === 'countryofloc'){
+			var title = "Country",
+			text = 'Country where this located',
+			props = {'id': 17,
+				'options': countries,
 				'followup': function () { saveProperties(); }
 			};
 		}
@@ -137,7 +148,7 @@ var ClassifyEntity = (function ($) {
 		if (typeId === 215627){ //people
 			additionalQuery('sex');
 		} else if (typeId === 618123){ //place
-			additionalQuery('country');
+			additionalQuery('countryofloc');
 		} else { //nothing else to ask, save now
 			saveProperties();
 		}
