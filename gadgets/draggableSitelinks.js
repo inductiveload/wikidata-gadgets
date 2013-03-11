@@ -1,4 +1,14 @@
-
+/**
+ * DraggableSitelink.js
+ *
+ * Easily add a Wikipedia as an "imported from" (P143) reference to any
+ * statement - just drag the sitelink on to the sources for that claim
+ *
+ * Patches to: https://github.com/inductiveload/wikidata-gadgets
+ * Release: 2013-03-11 v0.9
+ * Author: User:Inductiveload
+ * Licence: MIT/GPL
+ */
 
 var DraggableSitelinks = (function ($) {
 
