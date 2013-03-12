@@ -65,11 +65,24 @@ var DraggableSitelinks = (function ($) {
 			cursorAt: { top: 5, left: -5 },
 			start: function( event, ui ) {
 				$('div.wb-statement-references-container')
-					.addClass('x-draggable-sitelink-target');
+					.addClass('x-draggable-sitelink-target')
+					
+					//make the targets droppable (they can appear after load, 
+					//so can't do this at init time
+					.droppable({
+						drop: function( event, ui ) {
+							var lang = $(ui.helper).data('lang');
+
+							addImportedFrom($(event.target), lang);
+
+							return false;
+						}
+					});
 			},
 			stop: function( event, ui ) {
 				$('div.wb-statement-references-container')
-					.removeClass('x-draggable-sitelink-target');
+					.removeClass('x-draggable-sitelink-target')
+					.droppable('destroy');
 			},
 			helper: function( event ) {
 
@@ -93,18 +106,6 @@ var DraggableSitelinks = (function ($) {
 					.data('lang', langCode);
 			}
 		});
-
-		//make properties' source droppable
-		$('div.wb-statement-references-container').droppable({
-			drop: function( event, ui ) {
-				var lang = $(ui.helper).data('lang');
-
-				addImportedFrom($(event.target), lang);
-
-				return false;
-			}
-		});
-
 	},
 
 	addImportedFrom = function(target, lang) {
@@ -118,7 +119,7 @@ var DraggableSitelinks = (function ($) {
 		var sourceItem = wikiProperties[lang];
 
 		if (sourceItem === undefined){ //we don't know this wiki, have to bail
-			console.log("This Wiki does not have a know ID - add it!");
+			console.log("This Wiki does not have a known ID - add it!");
 			return;
 		}
 
