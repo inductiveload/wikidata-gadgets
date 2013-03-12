@@ -53,11 +53,24 @@ var DraggableSitelinks = (function ($) {
 
 	//Private functions
 	init = function () {
+		
+		//set up styles
+		$("<style type='text/css'></style>")
+			.append('.x-draggable-sitelink-target{ background-color:#6EDDA6;}')
+			.appendTo("head");
 
 		//make the sitelinks draggable
 		$('table.wb-sitelinks tbody > tr').draggable({
 			cursor: "move",
 			cursorAt: { top: 5, left: -5 },
+			start: function( event, ui ) {
+				$('div.wb-statement-references-container')
+					.addClass('x-draggable-sitelink-target');
+			},
+			stop: function( event, ui ) {
+				$('div.wb-statement-references-container')
+					.removeClass('x-draggable-sitelink-target');
+			},
 			helper: function( event ) {
 
 				var langCode = $(event.target)
