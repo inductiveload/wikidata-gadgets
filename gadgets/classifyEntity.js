@@ -10,14 +10,18 @@ var ClassifyEntity = (function ($) {
 	var currLang = mw.config.get( 'wgUserLanguage' );
 	var entityProperty = 107;
 	var typeNames = {
-		'en':['person', 'name', 'organisation', 'event', 'work', 'term', 'place'],
-		'de':['Person', 'Name', 'Organisation', 'Veranstaltung', 'Werk', 'Sachbegriff', 'Geografikum'],
+		'en':['person', 'name', 'organisation', 'event', 'work', 'term', 'place', 'species'],
+		'de':['Person', 'Name', 'Organisation', 'Veranstaltung', 'Werk', 'Sachbegriff', 'Geografikum', 'Art'],
 	};
-	var typeIds = [215627, 4167410, 43229, 1656682, 386724, 1969448, 618123];
-	
+	var typeIds = [215627, 4167410, 43229, 1656682, 386724, 1969448, 618123, 7432];
+
 	var countries = [
 				['UK', 145], ['Germany', 183],	['France', 142],
-				['Hungary', 28], ['Russia', 159] ]
+				['Hungary', 28], ['Russia', 159], ['USA', 30],
+				['Australia', 408], ['Canada', 16], ['Italy', 38],
+				['China', 148], ['Spain', 29], ['Japan', 17],
+				['Portugal', 45], ['Greece', 41], ['Sweden', 34]
+				]
 
 	var properties = [];
 	var changed = false;
@@ -91,7 +95,7 @@ var ClassifyEntity = (function ($) {
 				'followup': function () { saveProperties(); }
 			};
 		}
-		
+
 		if (type === 'countryofloc'){
 			var title = "Country",
 			text = 'Country where this located',
@@ -136,19 +140,32 @@ var ClassifyEntity = (function ($) {
 	}
 
 	var addItemProperty = function (prop, id){
-		properties.push({
-			'property': 'P' + prop,
-			'value': {"entity-type":"item","numeric-id": id }
-		});
+
+		if (propertyCount(id) == 0) {
+			properties.push({
+				'property': 'P' + prop,
+				'value': {"entity-type":"item","numeric-id": id }
+			});
+		}
 	}
 
 	var addType = function (typeId) {
-		addItemProperty(entityProperty, typeId );
+
+		if (typeId === 7432){ //species is a term
+			basicTypeId = 1969448;
+		} else {
+			basicTypeId = typeId;
+		}
+
+		addItemProperty(entityProperty, basicTypeId );
 
 		if (typeId === 215627){ //people
 			additionalQuery('sex');
 		} else if (typeId === 618123){ //place
 			additionalQuery('countryofloc');
+		} else if (typeId === 7432){ //species
+			addItemProperty(105, 7432 ); //taxon rank
+			saveProperties();
 		} else { //nothing else to ask, save now
 			saveProperties();
 		}
