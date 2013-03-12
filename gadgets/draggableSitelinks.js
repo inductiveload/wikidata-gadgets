@@ -48,7 +48,6 @@ var DraggableSitelinks = (function ($) {
 
 	importedFromProperty = 'p' + 143,
 	claimPatt=/q[0-9]+\$[\-A-F0-9]+/,
-	urlPatt=/[0-9]+$/,
 	myLang = mw.config.get('wgUserLanguage'),
 
 	//Private functions
