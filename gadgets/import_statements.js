@@ -172,6 +172,8 @@ var wd_import_statements = {
 	} ,
 
 	claimAlreadyExists : function ( entity, property, valueId ) {
+		
+		var self = this ;
 
 		if ( undefined !== entity
 			&& undefined !== entity.claims
