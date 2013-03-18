@@ -33,6 +33,11 @@ var wd_import_statements = {
 			{ key:'department' , statement:'is in the administrative unit' , type:'item' , pid:131 } ,
 			{ key:'region' , statement:'is in the administrative unit' , type:'item' , pid:131 } ,
 		],
+        'Infobox settlement' : [
+			{ key:'subdivision_name1' , statement:'is in the administrative unit' , type:'item' , pid:131 } ,
+			{ key:'subdivision_name2' , statement:'is in the administrative unit' , type:'item' , pid:131 } ,
+			{ key:'subdivision_name3' , statement:'is in the administrative unit' , type:'item' , pid:131 } ,
+        ],
 	} ,
 
 	running : false ,
@@ -281,7 +286,11 @@ var wd_import_statements = {
 	} ,
 
 	standardizeTemplateName : function ( s ) {
-		return ucFirst ( s.replace(/^\s+/,'').replace(/\s+$/,'').replace(/_/g,' ') ) ;
+		return ucFirst ( s.replace(/<!--.*?-->/g,'')
+			.replace(/^\s+/,'')
+			.replace(/\s+$/,'')
+			.replace(/_/g,' ')
+			) ;
 	} ,
 
 	parseTemplatesFromTree : function ( tree ) {
